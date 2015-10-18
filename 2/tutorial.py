@@ -3,8 +3,8 @@ from datetime import datetime
 from sqlalchemy.orm import *
 
 
-metadata = MetaData('mysql+pymysql://root:root@localhost/tutorial')
-metadata.bind.echo = True
+metadata = MetaData('mysql+pymysql://root:@localhost/tutorial')
+metadata.bind.echo = False
 
 
 user_table = Table(
@@ -51,6 +51,7 @@ mapper(User, user_table)
 mapper(Group, group_table)
 mapper(Permission, permission_table)
 
+
 if __name__ == '__main__':
 
     """
@@ -62,7 +63,8 @@ if __name__ == '__main__':
 
     user_table.insert().execute(user_name='rick1', password='secret', display_name='rick C')
     user_table.insert().execute(user_name='rick2', password='secret', display_name='rick C')
-    for row in user_table.select().execute():
+    result = user_table.select().execute()
+    for row in result:
         print(row)
 
     result = user_table.select().execute()
