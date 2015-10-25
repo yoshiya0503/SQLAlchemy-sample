@@ -19,10 +19,15 @@ metadata.create_all()
 r0 = Region(name='NorthEast')
 r1 = Region(name='NorthWest')
 print(r0, r1)
+print(r0.stores)
 
 s = Synonym()
 s.status = 'test'
 print(s.status)
+
+p =Product()
+p.summary = ProductSummary()
+print(p.summary)
 
 session.add_all([r0, r1, s])
 session.commit()

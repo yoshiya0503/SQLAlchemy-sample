@@ -13,6 +13,7 @@ from sqlalchemy.orm import mapper
 from sqlalchemy.ext.declarative import synonym_for
 from sqlalchemy.ext import declarative
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import relationship
 
 Base = declarative.declarative_base(metadata=metadata)
 
@@ -73,9 +74,16 @@ class Synonym(Base):
 
 
 mapper(Level, level_table)
-mapper(Category, category_table)
-mapper(Product, product_table)
+mapper(Category, category_table, properties=dict(
+    products=relationship(Product, secondary=product_category_table)
+))
+mapper(Product, product_table, properties=dict(
+    categories=relationship(Category, secondary=product_category_table),
+    summary=relationship(ProductSummary, uselist=False, backref='product')
+))
 mapper(ProductSummary, product_summary_table)
-mapper(Region, region_table)
+mapper(Region, region_table, properties=dict(
+    stores=relationship(Store, primaryjoin=(store_table.c.region_id==region_table.c.id))
+))
 mapper(Store, store_table)
 mapper(Price, product_price_table)
